@@ -1,0 +1,12 @@
+FROM nginx
+
+ADD ./index.html /var/www/html/index.html
+ADD ./nginx-conf/nginx-ssl.conf /etc/nginx/conf.d/default.conf
+
+# Примечание: здесь нет "RUN nginx -t", потому что конфиг ссылается на
+# /etc/nginx/ssl/server.crt и server.key, которых на этапе сборки еще нет -
+# они появятся в контейнере только во время запуска через volume mapping.
+
+STOPSIGNAL SIGTERM
+
+CMD ["nginx", "-g", "daemon off;"]
